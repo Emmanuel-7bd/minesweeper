@@ -1,31 +1,6 @@
 import random
 import os
-os.system('CLS')
 
-ligne=int(input('entrez un nombre de ligne:'))
-colonne=int(input('entrez un nombre de colonne:'))
-bomb_attack=int(input('entrez le nombre de bombes: '))
-k=0
-i=0
-j=0
-list1=[random.randint(0,ligne-1)]
-list2=[random.randint(0,colonne-1)]
-
-while (k<bomb_attack-1):
-    x=random.randint(0,ligne-1)
-    y=random.randint(0,colonne-1)
-    test=False
-    for i, val in enumerate(list1):
-        if val==x and list2[i]==y:
-            test=False
-            break
-        else:
-            test=True
-    if test:
-        list1.append(x)
-        list2.append(y)
-        k+=1
-        
 def is_bomb(list1, list2, a, b):
     for index , val in enumerate(list1):
         if val==a:
@@ -57,23 +32,12 @@ def check_case(list1, list2, a, b):
                                     number_of_bomb+=1
     return number_of_bomb
 
-tab=[]  
-response=[[0 for _ in range(ligne)]for _ in range(colonne)]                        
-for i in range(ligne):
-    for j in range(colonne):
-        line=' '+str(check_case(list1, list2, i , j))+' '
-        tab.append(line)
-        response[i][j]=check_case(list1, list2, i , j)
-    print(tab)
-    tab=[]    
-
 def is_null(a):
     return a==0
 
-tab_user=[['x' for _ in range(ligne)]for _ in range(colonne)] 
 def insert_null_tab_user(tab_user, tab_response, i , j):
     if in_game(ligne, colonne, i, j):
-        if tab_user[i][j]=='x':
+        if tab_user[i][j]=='o':
             x=i-1
             y=j-1
             for k in range(x,x+3):
@@ -84,8 +48,6 @@ def insert_null_tab_user(tab_user, tab_response, i , j):
                     else:
                         tab_user[i][j]=tab_response[i][j]
     return tab_user
-                        
-
 
 def insert_input(tab_user, tab_response, i, j):
     x=tab_response[i][j]
@@ -95,7 +57,6 @@ def insert_input(tab_user, tab_response, i, j):
         tab_user=insert_null_tab_user(tab_user, tab_response, i, j)
     else:
         tab_user[i][j]=tab_response[i][j]
-    
     return tab_user
 
 def display_dubbel_tab(tab):
@@ -118,7 +79,7 @@ def display_games(tab_user,ligne, colonne):
     os.system('CLS')
     i=0
     j=0
-    first_line=''
+    first_line=' '
     while (j<ligne):
         while i<colonne:
             if j==0:
@@ -131,7 +92,10 @@ def display_games(tab_user,ligne, colonne):
         while i<colonne:
             if i==0:
                 screen=''
-                screen+=str(j+1)
+                if len(str(j+1))==1:
+                    screen+=' '+str(j+1)
+                else:
+                    screen+=str(j+1)
             screen+=(' '+str(tab_user[j][i])+' |')
             i+=1
         i=0
@@ -151,14 +115,48 @@ def compareX(list1, list2, i, j):
 def check_tab_user(tab_user):
     for i in range(len(tab_user[1])):
         for j in range(len(tab_user)):
-            if tab_user[i][j]=='x':
+            if tab_user[i][j]=='o':
                 if compareX(list1,list2,i,j)==True:
                     pass
                 else:
                     return False
     return True
+
+os.system('CLS')
+ligne=int(input('entrez un nombre de ligne:'))
+colonne=int(input('entrez un nombre de colonne:'))
+bomb_attack=int(input('entrez le nombre de bombes: '))
+k=0
+i=0
+j=0
+list1=[random.randint(0,ligne-1)]
+list2=[random.randint(0,colonne-1)]
+tab=[]  
+response=[[0 for _ in range(ligne)]for _ in range(colonne)] 
+tab_user=[['o' for _ in range(ligne)]for _ in range(colonne)]  
+while (k<bomb_attack-1):
+    x=random.randint(0,ligne-1)
+    y=random.randint(0,colonne-1)
+    test=False
+    for i, val in enumerate(list1):
+        if val==x and list2[i]==y:
+            test=False
+            break
+        else:
+            test=True
+    if test:
+        list1.append(x)
+        list2.append(y)
+        k+=1
+                       
+for i in range(ligne):
+    for j in range(colonne):
+        line=' '+str(check_case(list1, list2, i , j))+' '
+        tab.append(line)
+        response[i][j]=check_case(list1, list2, i , j)
+    print(tab)
+    tab=[]           
     
-        
 while(True): 
     display_games(tab_user,ligne, colonne) 
     coordX=int(input('Entrez x:'))-1                   
