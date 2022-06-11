@@ -2,6 +2,7 @@ import random
 import os
 
 def is_bomb(list1, list2, a, b):
+    # returns true if a bomb is at coordinates (a,b)
     for index , val in enumerate(list1):
         if val==a:
             if list2[index]==b:
@@ -9,11 +10,13 @@ def is_bomb(list1, list2, a, b):
     return False
 
 def in_game(ligne, colonne, x,y):
+    # check if coordinates (x,y) are not out of range
     if x<0 or x>=ligne or y<0 or y>=colonne:
         return False
     return True
 
 def check_case(list1, list2, a, b):
+    # returns the number of bombs around coordinates (a,b) or # if a bomb is there
     x=a-1
     y=b-1
     number_of_bomb=0
@@ -36,6 +39,8 @@ def is_null(a):
     return a==0
 
 def insert_null_tab_user(tab_user, tab_response, i , j):
+    # update 'tab_user' according to entered coordinates (i,j)
+    # if the square is empty, finds and reveals the empty squares around
     if in_game(ligne, colonne, i, j):
         if tab_user[i][j]=='o':
             x=i-1
@@ -50,6 +55,7 @@ def insert_null_tab_user(tab_user, tab_response, i , j):
     return tab_user
 
 def insert_input(tab_user, tab_response, i, j):
+    # reveal the coordinates(i,j) in the array representing the user's inputs according to the response array
     x=tab_response[i][j]
     if x=='#':
         return False
@@ -58,14 +64,6 @@ def insert_input(tab_user, tab_response, i, j):
     else:
         tab_user[i][j]=tab_response[i][j]
     return tab_user
-
-def display_dubbel_tab(tab):
-    disp=[]
-    for i in range(len(tab[1])):
-        for j in range(len(tab)):
-            disp.append(tab[i][j])
-        print(disp)
-        disp=[]
 
 def empty_string(n):
     temp='  '
@@ -106,6 +104,7 @@ def display_games(tab_user,ligne, colonne):
         screen='|'
 
 def compareX(list1, list2, i, j):
+    # returns true if a bomb is detected at coordinates (i,j)
     for m, val in enumerate(list1):
         if val==i:
             if list2[m]==j:
@@ -113,6 +112,7 @@ def compareX(list1, list2, i, j):
     return False
 
 def check_tab_user(tab_user):
+    # returns true if all squares have been revealed except bombs
     for i in range(len(tab_user[1])):
         for j in range(len(tab_user)):
             if tab_user[i][j]=='o':
@@ -129,11 +129,15 @@ bomb_attack=int(input('entrez le nombre de bombes: '))
 k=0
 i=0
 j=0
-list1=[random.randint(0,ligne-1)]
-list2=[random.randint(0,colonne-1)]
-tab=[]  
-response=[[0 for _ in range(ligne)]for _ in range(colonne)] 
+
+# user input array initialization
 tab_user=[['o' for _ in range(ligne)]for _ in range(colonne)]  
+
+# x coordinate of bombs
+list1=[random.randint(0,ligne-1)]
+# y coordinate of bombs
+list2=[random.randint(0,colonne-1)]
+# depositing bombs at coordinates x(list1) and y(list2)
 while (k<bomb_attack-1):
     x=random.randint(0,ligne-1)
     y=random.randint(0,colonne-1)
@@ -148,15 +152,15 @@ while (k<bomb_attack-1):
         list1.append(x)
         list2.append(y)
         k+=1
-                       
+
+# response array initialization
+response=[[0 for _ in range(ligne)]for _ in range(colonne)]   
+# creation of the response array                  
 for i in range(ligne):
     for j in range(colonne):
-        line=' '+str(check_case(list1, list2, i , j))+' '
-        tab.append(line)
         response[i][j]=check_case(list1, list2, i , j)
-    print(tab)
-    tab=[]           
-    
+
+# game launch
 while(True): 
     display_games(tab_user,ligne, colonne) 
     coordX=int(input('Entrez x:'))-1                   
@@ -167,5 +171,6 @@ while(True):
         print('BOUM')
         break
     if check_tab_user(tab_user):
+        display_games(tab_user,ligne, colonne)
         print('Bravo')
         break
