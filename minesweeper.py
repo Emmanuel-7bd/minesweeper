@@ -79,7 +79,7 @@ def insert_null_tab_user(tab_user, tab_response, i , j):
             for k in range(x,x+3):
                 for l in range(y,y+3):
                     if is_null(tab_response[i][j]):
-                        tab_user[i][j]=0
+                        tab_user[i][j]=' '
                         insert_null_tab_user(tab_user, tab_response, k, l)
                     else:
                         tab_user[i][j]=tab_response[i][j]
@@ -105,19 +105,33 @@ def display_dubbel_tab(tab):
             disp.append(tab[i][j])
         print(disp)
         disp=[]
+
+def empty_string(n):
+    temp='  '
+    for i in range(n):
+        if len(temp)<=0:
+            return temp
+        temp=temp[1:]
+    return temp
         
 def display_games(tab_user,ligne, colonne):
     os.system('CLS')
     i=0
     j=0
-    first_line='-'
-    screen='|'
+    first_line=''
     while (j<ligne):
         while i<colonne:
-            first_line+=('----')
+            if j==0:
+                end_string=empty_string(len(str(i+1)))
+                first_line+=('  '+str(i+1)+end_string)
+            else:
+                first_line+=('----')
             i+=1
         i=0
         while i<colonne:
+            if i==0:
+                screen=''
+                screen+=str(j+1)
             screen+=(' '+str(tab_user[j][i])+' |')
             i+=1
         i=0
