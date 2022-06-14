@@ -40,7 +40,7 @@ def is_null(a):
 
 def insert_null_tab_user(tab_user, tab_response, i , j):
     # update 'tab_user' according to entered coordinates (i,j)
-    # if the square is empty, finds and reveals the empty squares around
+    # if the square is empty, finds and reveals the squares around
     if in_game(ligne, colonne, i, j):
         if tab_user[i][j]=='o':
             x=i-1
@@ -94,7 +94,7 @@ def display_games(tab_user,ligne, colonne):
                     screen+=' '+str(j+1)
                 else:
                     screen+=str(j+1)
-            screen+=(' '+str(tab_user[j][i])+' |')
+            screen+=(' '+str(tab_user[i][j])+' |')
             i+=1
         i=0
         j+=1
@@ -154,11 +154,14 @@ while (k<bomb_attack-1):
         k+=1
 
 # response array initialization
-response=[[0 for _ in range(ligne)]for _ in range(colonne)]   
+response=[[0 for _ in range(colonne)]for _ in range(ligne)]   
 # creation of the response array                  
 for i in range(ligne):
     for j in range(colonne):
-        response[i][j]=check_case(list1, list2, i , j)
+        v=check_case(list1, list2, i , j)
+        print(v)
+        print(response)
+        response[i][j]=v
 
 # game launch
 while(True): 
